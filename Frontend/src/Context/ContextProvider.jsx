@@ -16,8 +16,8 @@ export const ContextProvider = (props) => {
     const [user, setUser] = useState(null)
     const [searchResults, setSearchResults] = useState([])
     const authToken = `Bearer ${token}`
-    const BASE_URL = "http://localhost:5000/api"
-    // const BASE_URL = "https://e-commerce-server-sqfv.onrender.com/api"
+    // const BASE_URL = "http://localhost:5000/api"
+    const BASE_URL = "https://e-commerce-server-sqfv.onrender.com/api"
     const isLoggedin = !!token;
     const navigate = useNavigate()
 
