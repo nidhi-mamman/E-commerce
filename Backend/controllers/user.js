@@ -69,7 +69,7 @@ const signIn = async (req, res) => {
     if (passwordMatch) {
       const token = await jwt.sign(
         { userId: user._id, email: user.email },
-        process.env.JWT_sECRET,
+        process.env.JWT_SECRET,
         { expiresIn: "9999d" }
       );
       return res.status(200).json({
