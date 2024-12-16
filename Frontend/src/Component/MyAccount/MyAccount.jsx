@@ -65,7 +65,7 @@ const MyAccount = () => {
             const response = await axios.post(`${BASE_URL}/signup`, formData)
             if (response.status === 201) {
                 toast.success("Signed up successfully")
-                navigate('/')
+                navigate('/myAcc')
             }
         } catch (error) {
             console.log(error)
