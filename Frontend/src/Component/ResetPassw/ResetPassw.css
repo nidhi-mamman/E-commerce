@@ -1,0 +1,60 @@
+.otp-container {
+  height: 20rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 13rem;
+}
+
+.reset-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  width: 25rem;
+  box-shadow: 2px 2px 2px 2px grey;
+}
+
+.secure-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-left: 0rem !important;
+}
+
+.passw-reset {
+  width: 100%;
+  border: 1px solid grey;
+}
+
+.key {
+  top: 0.2rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.reset-form {
+  height: 15rem !important;
+  padding: 1rem;
+  width: 100%;
+}
+
+.otp-input,
+.reset-pass {
+  width: 100% !important;
+  outline: none;
+  border: 1px solid grey;
+}
+
+.reset-password {
+  background-color: rgb(23 37 84);
+  border-radius: 0px;
+  margin: 0px;
+}
+
+@media screen and (max-width: 740px) {
+  .secure {
+    margin-left: 0rem !important;
+  }
+}
