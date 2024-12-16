@@ -8,7 +8,7 @@ const app = express();
 
 
 const corsOptions = {
-  origin: ["http://localhost:5173","https://shopify-927t.onrender.com"],
+  origin: ["http://localhost:5173","https://e-commerce-ui-1iel.onrender.com"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
