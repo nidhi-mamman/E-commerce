@@ -1,7 +1,6 @@
 const express=require("express")
-
-const {signUp,signIn,getUser,sendOtp,submitOtp}=require('../controllers/user')
 const authMiddleware=require('../middleware/authmiddleware')
+const {signUp,signIn,getUser,sendOtp,submitOtp,addToCart,removeFromCart,getCart ,makePayment}=require('../controllers/user')
 
 const router=express.Router()
 
@@ -9,6 +8,10 @@ router.post('/signup',signUp)
 router.post('/signin',signIn)
 router.post('/send-otp',sendOtp)
 router.post('/submit-otp',submitOtp)
+router.post('/addToCart',authMiddleware,addToCart)
+router.post('/removeFromCart',authMiddleware,removeFromCart )
+router.post('/getCart',authMiddleware,getCart )
 router.get('/user',authMiddleware,getUser)
+router.post('/makePayment',authMiddleware,makePayment)
 
 module.exports=router

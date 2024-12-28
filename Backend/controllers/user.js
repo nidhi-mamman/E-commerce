@@ -2,6 +2,7 @@ const User = require("../model/user");
 const bycrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const signUp = async (req, res) => {
   try {
@@ -38,10 +39,31 @@ const signUp = async (req, res) => {
 
     const encPassword = await bycrypt.hash(password, 10);
 
+    let cart = {};
+    const itemIds = [
+      "1",
+      "2",
+      "3",
+      "4", // Men
+      "1w",
+      "2w",
+      "3w",
+      "4w", // Women
+      "1k",
+      "2k",
+      "3k",
+      "4k", // Kids
+    ];
+
+    itemIds.forEach((id) => {
+      cart[id] = 0;
+    });
+
     const user = await User.create({
       name: name,
       email: email,
       password: encPassword,
+      cartData: cart,
     });
     if (user) {
       return res.status(201).json({
@@ -82,7 +104,7 @@ const signIn = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       msg: "Internal server error",
     });
@@ -187,4 +209,80 @@ const submitOtp = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn, getUser, sendOtp, submitOtp };
+const addToCart = async (req, res) => {
+  let userData = await User.findOne({ _id: req.user.id });
+  userData.cartData[req.body.itemId] += 1;
+  await User.findOneAndUpdate(
+    { _id: req.user.id },
+    { cartData: userData.cartData }
+  );
+  res.json("Added");
+};
+
+const removeFromCart = async (req, res) => {
+  let userData = await User.findOne({ _id: req.user.id });
+  if (userData.cartData[req.body.itemId] > 0)
+    userData.cartData[req.body.itemId] -= 1;
+  await User.findOneAndUpdate(
+    { _id: req.user.id },
+    { cartData: userData.cartData }
+  );
+  res.json("Removed");
+};
+
+const getCart = async (req, res) => {
+  let userData = await User.findOne({ _id: req.user.id });
+  res.json(userData.cartData);
+};
+
+const makePayment = async (req, res) => {
+  try {
+    // Find the user's cart
+    const userData = await User.findOne({ _id: req.user.id });
+
+    if (!userData.cartData || Object.keys(userData.cartData).length === 0) {
+      return res.status(400).json({ error: "Cart is empty" });
+    }
+
+    // Calculate total amount (assuming you have item prices in your DB)
+    let totalAmount = 0;
+    for (const itemId in userData.cartData) {
+      const quantity = userData.cartData[itemId];
+
+      // Retrieve item details (e.g., price) from your product collection
+      const item = await Product.findOne({ _id: itemId });
+      if (!item) {
+        return res
+          .status(404)
+          .json({ error: `Product with ID ${itemId} not found` });
+      }
+
+      totalAmount += item.price * quantity;
+    }
+
+    // Create a PaymentIntent with Stripe
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalAmount * 100, // Stripe works in cents (for USD), so multiply by 100
+      currency: "usd", // Change this to your currency
+      payment_method_types: ["card"], // Accept card payments
+    });
+
+    // Respond with the PaymentIntent client secret
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error("Error in makePayment:", error.message);
+    res.status(500).json({ error: "An error occurred during payment" });
+  }
+};
+
+module.exports = {
+  signUp,
+  signIn,
+  getUser,
+  sendOtp,
+  submitOtp,
+  addToCart,
+  removeFromCart,
+  getCart,
+  makePayment,
+};

@@ -7,7 +7,7 @@ import { shopContext } from '../Context/ContextProvider';
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 const CartItems = () => {
-    const { allProducts, cartItems, getTotalAmount, removeFromCart, addToCart } = useContext(shopContext);
+    const { allProducts, cartItems, getTotalAmount, removeFromCart, addToCart,makePayment } = useContext(shopContext);
 
     console.log('Total Amount:', getTotalAmount());
 
@@ -87,7 +87,7 @@ const CartItems = () => {
                                 ${getTotalAmount()}
                             </p>
                         </div>
-                        <Link to='/order' className='cursor-pointer'> <button className='checkout'>PROCEED TO CHECKOUT</button></Link>
+                        <Link to='/order' className='cursor-pointer'> <button className='checkout'onClick={makePayment()}>PROCEED TO CHECKOUT</button></Link>
                     </div>
                 </div>
             </div>

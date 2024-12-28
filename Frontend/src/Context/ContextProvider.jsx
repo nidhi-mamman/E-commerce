@@ -2,12 +2,15 @@
 import { createContext, useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { loadStripe } from '@stripe/stripe-js';
 
 export const shopContext = createContext()
 
 export const ContextProvider = (props) => {
     const [token, setToken] = useState(localStorage.getItem('user'))
-    const [cartItems, setCartItems] = useState({})
+    const authToken = `Bearer ${token}`
+    const [cartItems, setCartItems] = useState({});
     const [allProducts, setAllProducts] = useState([])
     const [mensProducts, setMensProducts] = useState([])
     const [womensProducts, setWomensProducts] = useState([])
@@ -15,9 +18,8 @@ export const ContextProvider = (props) => {
     const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState(null)
     const [searchResults, setSearchResults] = useState([])
-    const authToken = `Bearer ${token}`
-    // const BASE_URL = "http://localhost:5000/api"
-    const BASE_URL = "https://e-commerce-server-sqfv.onrender.com/api"
+    const BASE_URL = "http://localhost:5000/api"
+    // const BASE_URL = "https://e-commerce-server-sqfv.onrender.com/api"
     const isLoggedin = !!token;
     const navigate = useNavigate()
 
@@ -48,29 +50,75 @@ export const ContextProvider = (props) => {
 
     const LogoutUser = async () => {
         setToken("")
-        return localStorage.removeItem("user")
-    }
-
+        setCartItems({})
+        localStorage.removeItem("user");
+    };
 
     const getCartData = (products) => {
         const cart = {};
-        products.forEach(product => {
-            cart[product.id] = 0;
+        products.forEach((product) => {
+            cart[product.id] = cart[product.id] || 0;
         });
         return cart;
     };
 
     const addToCart = (itemId) => {
-        setCartItems((prev) => {
-            const updatedCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
-            console.log(updatedCart);
-            return updatedCart;
-        });
+        if (!isLoggedin) {
+            toast("Login first");
+            navigate('/myAcc');
+            return;
+        }
+        setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
+
+        if (localStorage.getItem('user')) {
+            axios.post(
+                `${BASE_URL}/addToCart`,
+                { itemId },
+                {
+                    headers: {
+                        Authorization: authToken,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            )
+                .then(response => {
+                    console.log('Item added to cart:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error adding item to cart:', error.response?.data || error.message);
+                });
+        }
+
+
     };
 
 
     const removeFromCart = (itemId) => {
-        setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }))
+        setCartItems((prev) => {
+            // Only decrement if the item count is greater than 0
+            if (prev[itemId] > 0) {
+                return { ...prev, [itemId]: prev[itemId] - 1 };
+            }
+            return prev; // Don't modify if quantity is 0
+        });
+        if (localStorage.getItem('user')) {
+            axios.post(
+                `${BASE_URL}/removeFromCart`,
+                { itemId },
+                {
+                    headers: {
+                        Authorization: authToken,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            )
+                .then(response => {
+                    console.log('Item removing to cart:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error removing item to cart:', error.response?.data || error.message);
+                });
+        }
     }
 
     const getTotalAmount = () => {
@@ -78,19 +126,18 @@ export const ContextProvider = (props) => {
 
         for (let item in cartItems) {
             if (cartItems[item] > 0) {
-                // Flatten the products and find the item
+
                 let itemInfo = allProducts.flatMap(category => category.category_products).find((product) => product.id === item);
 
-                // Check if itemInfo exists before accessing price
                 if (itemInfo) {
-                    totalAmount += Number(itemInfo.price) * cartItems[item]; // Ensure price is treated as a number
+                    totalAmount += Number(itemInfo.price) * cartItems[item];
                 } else {
                     console.warn(`Product with ID ${item} not found.`);
                 }
             }
         }
 
-        return totalAmount; // Return the total amount after the loop
+        return totalAmount;
     };
 
     const getTotalCartItems = () => {
@@ -105,16 +152,21 @@ export const ContextProvider = (props) => {
 
     const getAllData = async () => {
         try {
-            const response = await axios.get('https://cdn.shopify.com/s/files/1/0564/3685/0790/files/multiProduct.json')
-            const all_products = await response.data.categories;
-            setAllProducts(all_products)
-            setCartItems(getCartData(all_products.flatMap(category => category.category_products)));
-            console.log("all products are:", allProducts)
-            console.log("cart items are:", cartItems)
+            const response = await axios.get('https://cdn.shopify.com/s/files/1/0564/3685/0790/files/multiProduct.json');
+            const all_products = response.data.categories;
+            setAllProducts(all_products);
+
+            // Only set initial cart data if there are no existing cart items
+            if (Object.keys(cartItems).length === 0) {
+                setCartItems(getCartData(all_products.flatMap(category => category.category_products)));
+            }
+
+            console.log("all products are:", allProducts);
+            console.log("cart items are:", cartItems);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     const getMensProducts = () => {
         if (allProducts.length > 0) {
@@ -144,7 +196,7 @@ export const ContextProvider = (props) => {
     }
 
     const searchProducts = (query) => {
-        const regex = new RegExp(`\\b${query}\\b`, "i"); // Whole word, case-insensitive
+        const regex = new RegExp(`\\b${query}\\b`, "i");
         const results = allProducts
             .flatMap(category => category.category_products)
             .filter(product => regex.test(product.title) || regex.test(product.category || ""));
@@ -157,9 +209,55 @@ export const ContextProvider = (props) => {
         }
     };
 
-
+    const makePayment = async () => {
+        const stripe = await loadStripe("pk_test_51Qb00V4f1GcD06tgCq3EGLQoD2DTEOmaIrpUr4CjiMyCOFWqaj1DVJrErHbtJ2VkBkW5FIJwgEUiPHWOv5URksfU00bvadjQKz");
+    
+        const body = {
+            products: cartItems, 
+        };
+    
+        const headers = {
+            "Content-Type": "application/json",
+        };
+    
+        try {
+            // Make the POST request using Axios
+            const response = await axios.post(`${BASE_URL}/create-checkout-session`, body, { headers });
+            
+            const session = response.data; // Assuming the response contains the session object
+    
+            // Redirect to Stripe Checkout
+            const result = await stripe.redirectToCheckout({
+                sessionId: session.id,
+            });
+    
+            if (result.error) {
+                console.error(result.error.message);
+            }
+        } catch (error) {
+            console.error("Error creating checkout session:", error.response?.data || error.message);
+        }
+    };
+    
     useEffect(() => {
         getAllData()
+        if (localStorage.getItem('user')) {
+            axios.post(
+                `${BASE_URL}/getCart`, {},
+                {
+                    headers: {
+                        Authorization: authToken,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            )
+                .then((response) => {
+                    setCartItems(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching cart data:', error);
+                });
+        }
     }, [])
 
     useEffect(() => {
@@ -200,10 +298,10 @@ export const ContextProvider = (props) => {
             isLoggedin,
             isLoading,
             setIsLoading,
-            LogoutUser
+            LogoutUser,
+            makePayment
         }}>
             {props.children}
         </shopContext.Provider>
     )
-
 }

@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ForgetPassword from './Component/ForgetPassword/ForgetPassword.jsx'
 import MyAccount from './Component/MyAccount/MyAccount.jsx';
 import ResetPassw from './Component/ResetPassw/Resetpassw.jsx'
+import Form from './Pages/form.jsx'
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/order" element={<OrderPlaced />} />
                 <Route path="/myAcc" element={<MyAccount />} />
                 <Route path="/logout" element={<Logout />} />
+                <Route path="/form" element={<Form />} />
                 <Route path="/forgetpass" element={<ForgetPassword/>} />
                 <Route path="/resetpass" element={<ResetPassw/>} />
               </Routes>
