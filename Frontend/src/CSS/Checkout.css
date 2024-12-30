@@ -89,7 +89,9 @@
 @media screen and (max-width: 740px) {
 
   .section{
-    margin-top: 14rem!important;
+    padding: 10px;
+    flex-direction: column;
+    margin-top: 14.5rem!important;
   }
   .checkout-group1 {
     display: flex;
