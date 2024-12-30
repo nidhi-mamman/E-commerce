@@ -87,6 +87,10 @@
 }
 
 @media screen and (max-width: 740px) {
+
+  .section{
+    margin-top: 15rem;
+  }
   .checkout-group1 {
     display: flex;
     gap:1rem !important;
