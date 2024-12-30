@@ -1,15 +1,27 @@
 import { useContext } from 'react';
 import '../CSS/CartItems.css';
-import { Link } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
 import { shopContext } from '../Context/ContextProvider';
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const CartItems = () => {
-    const { allProducts, cartItems, getTotalAmount, removeFromCart, addToCart } = useContext(shopContext);
+    const { allProducts, cartItems, getTotalAmount, removeFromCart, addToCart, isLoggedin } = useContext(shopContext);
+    const navigate = useNavigate()
+    const handleCheckout = async (e) => {
+        e.preventDefault()
+        if (!isLoggedin) {
+            return toast("Login first")
+        }
+        const hasItemsInCart = Object.keys(cartItems).some((productId) => cartItems[productId] > 0);
 
-    console.log('Total Amount:', getTotalAmount());
+        if (!hasItemsInCart) {
+            return toast("Your cart is empty");
+        }
+        navigate('/checkout')
+    }
 
     return (
         <div className="cartitems">
@@ -28,7 +40,7 @@ const CartItems = () => {
                     <div key={category.category_name}>
                         <div className="cartitems-format">
                             {category.category_products.map((product) => {
-                                if (cartItems[product.id] > 0) { 
+                                if (cartItems[product.id] > 0) {
                                     return (<>
                                         <div key={product.id} className="cartitems-card">
                                             <img src={product.image} alt={product.title} />
@@ -87,7 +99,7 @@ const CartItems = () => {
                                 ${getTotalAmount()}
                             </p>
                         </div>
-                        <Link to='/checkout' className='cursor-pointer'> <button className='checkout'>PROCEED TO CHECKOUT</button></Link>
+                        <button className='checkout cursor-pointer' onClick={handleCheckout}>PROCEED TO CHECKOUT</button>
                     </div>
                 </div>
             </div>
