@@ -1,8 +1,11 @@
 .section {
-  margin-top: 12.9rem;
+  margin-top: 12.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.deliver-container{
+  margin-top:13rem;
 }
 
 .summary-container {
@@ -68,6 +71,10 @@
   display: none;
 }
 
+.show{
+  display: block;
+}
+
 .buy {
   color: #fff;
   background-color: rgb(23 37 84);
@@ -104,7 +111,10 @@
   .summary-container {
     display: flex;
     flex-direction: column;
-    margin-bottom: 5rem;
+  }
+
+  .deliver-container{
+    margin-top:8rem;
   }
 
   .deliveryto .card-body {
