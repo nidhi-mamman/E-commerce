@@ -1,11 +1,11 @@
 .section {
-  margin-top: 12.5rem;
+  margin-top: 13rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .deliver-container{
-  margin-top:8rem;
+  margin-top:13rem;
 }
 
 .summary-container {
@@ -114,7 +114,7 @@
   }
 
   .deliver-container{
-    margin-top:8rem;
+    margin-top:5rem;
   }
 
   .deliveryto .card-body {
