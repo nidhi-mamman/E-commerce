@@ -34,7 +34,7 @@ const Hero = (props) => {
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
                         Libero mollitia officia iure similique, dolorem asperiores
                         fugit facilis labore quos ea aliquam necessitatibus accusamus ariatur!</p>
-                    <button className='btn'>Shop Now</button>
+                    <button className='btn'>Shop</button>
                 </div>
                 <div className="right-mobile">
                     <div className="image-area-mobile">
