@@ -9,7 +9,7 @@ import { IoIosMenu } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 
 const Navbar = () => {
-    const { searchProducts, getTotalCartItems} = useContext(shopContext)
+    const { searchProducts, getTotalCartItems, isLoggedin } = useContext(shopContext)
     const [query, setQuery] = useState('')
     const [showSubmenu, setShowSubmenu] = useState(false)
     const [showMobileMenu, setShowMobileMenu] = useState(false)
@@ -98,7 +98,13 @@ const Navbar = () => {
                     </div>
                     <li>FAQ</li>
                     <li>Contact</li>
-                    <li><Link to='/myAcc'><button className="bg-blue-950 text-white p-2">Login</button></Link></li>
+                    {
+                        isLoggedin ?
+                            <li><Link to='/logout'><button className="bg-blue-950 text-white p-2">Logout</button></Link></li>
+                            :
+                            <li><Link to='/myAcc'><button className="bg-blue-950 text-white p-2">Login</button></Link></li>
+                    }
+
                 </ul>
             </div>
         </>
