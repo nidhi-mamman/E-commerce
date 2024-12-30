@@ -87,15 +87,21 @@
 }
 
 @media screen and (max-width: 740px) {
-
-  .section{
+  .section {
     padding: 10px;
     flex-direction: column;
-    margin-top: 14.5rem!important;
+    margin-top: 14.5rem !important;
+  }
+  .order-summary-card .card-body {
+    width: 20rem;
+  }
+
+  .deliveryto .card-body {
+    width: 23rem;
   }
   .checkout-group1 {
     display: flex;
-    gap:0.8rem !important;
+    gap: 0.8rem !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
