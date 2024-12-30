@@ -5,7 +5,7 @@
   justify-content: center;
 }
 
-.summary-contain {
+.summary-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,10 +16,11 @@
   width: 100%;
 }
 
-.container2-checkout {
+.container2-checkout,
+.container3-checkout {
   padding: 10px;
   width: 60%;
-  height: 21rem;
+  height: 16rem;
 }
 
 .checkout-form {
@@ -100,11 +101,11 @@
     width: 20rem;
   }
 
-  .summary-contain {
+  .summary-container {
     display: flex;
     flex-direction: column;
   }
-  
+
   .deliveryto .card-body {
     width: 20rem;
   }

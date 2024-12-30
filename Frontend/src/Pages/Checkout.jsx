@@ -151,44 +151,42 @@ const Checkout = () => {
                     </form>
                 </div>
             </section>
-            <div className="summary-contain">
-                {showContainer2 && (<>
-                    <div className="container2-checkout">
-                        <div className="card deliveryto">
-                            <div className="card-body">
-                                <h2 className="card-title font-bold">Delivering to:</h2>
-                                <p className="card-text">
-                                    {address.fullname},<br />
-                                    {address.phonenumber},<br />
-                                    {address.area}, {address.landmark}, {address.town},<br />
-                                    {address.state}, {address.country}, {address.pincode}
-                                </p>
-                            </div>
+            {showContainer2 && (<div className="summary-container">
+                <div className="container2-checkout">
+                    <div className="card deliveryto">
+                        <div className="card-body">
+                            <h2 className="card-title font-bold">Delivering to:</h2>
+                            <p className="card-text">
+                                {address.fullname},<br />
+                                {address.phonenumber},<br />
+                                {address.area}, {address.landmark}, {address.town},<br />
+                                {address.state}, {address.country}, {address.pincode}
+                            </p>
                         </div>
                     </div>
-                    <div className="container2-checkout">
-                        <div className="card order-summary-card" >
-                            <div className="card-body">
-                                <h5 className="card-title font-bold ">ORDER SUMMARY</h5>
-                                <p className="card-text flex items-center justify-between">
-                                    <h2>Items:</h2>
-                                    <span>---</span>
-                                </p>
-                                <p className="card-text flex items-center justify-between">
-                                    <h2>Delivery:</h2>
-                                    <span>---</span>
-                                </p>
-                                <p className='card-text flex items-center justify-between font-bold font-sans text-red-700'>
-                                    <h2>ORDER TOTAL:</h2>
-                                    <span>${getTotalAmount()}</span>
-                                </p>
-                                <button className='buy'>PROCEED TO BUY</button>
-                            </div>
+                </div>
+                <div className="container3-checkout">
+                    <div className="card order-summary-card" >
+                        <div className="card-body">
+                            <h5 className="card-title font-bold ">ORDER SUMMARY</h5>
+                            <p className="card-text flex items-center justify-between">
+                                <h2>Items:</h2>
+                                <span>---</span>
+                            </p>
+                            <p className="card-text flex items-center justify-between">
+                                <h2>Delivery:</h2>
+                                <span>---</span>
+                            </p>
+                            <p className='card-text flex items-center justify-between font-bold font-sans text-red-700'>
+                                <h2>ORDER TOTAL:</h2>
+                                <span>${getTotalAmount()}</span>
+                            </p>
+                            <button className='buy'>PROCEED TO BUY</button>
                         </div>
                     </div>
-                </>
-                )}
+                </div>
             </div>
+            )}
         </>
     )
 }
