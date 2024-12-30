@@ -16,6 +16,7 @@
   padding-inline: 2rem;
   padding-block: 2rem;
   place-items: center;
+  border: none;
   grid-template-columns: repeat(4, 1fr);
 }
 

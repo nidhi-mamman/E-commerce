@@ -18,7 +18,7 @@ const Women = ({ banner }) => {
                 <div key={products.id}>
                   <img src={products.image} alt="" />
                   <h1>{products.title}</h1>
-                  <h2>{products.price}</h2>
+                  <h2>${products.price}</h2>
                   <h3>{products.vendor}</h3>
                   <button className="btn">Add To Cart</button>
 

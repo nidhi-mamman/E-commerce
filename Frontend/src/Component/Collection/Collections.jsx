@@ -35,7 +35,7 @@ const Collections = () => {
                                                     <img src={products.image} alt="" />
                                                     <div className="descript">
                                                         <h1>{products.title}</h1>
-                                                        <h2>{products.price}</h2>
+                                                        <h2>${products.price}</h2>
                                                         <h3>{products.vendor}</h3>
                                                         <button className="addToCart" onClick={()=>{addToCart(products.id)}}>Add to Cart</button>
                                                     </div>

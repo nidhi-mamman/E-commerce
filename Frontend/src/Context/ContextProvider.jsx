@@ -3,7 +3,6 @@ import { createContext, useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
-import { loadStripe } from '@stripe/stripe-js';
 
 export const shopContext = createContext()
 
@@ -209,35 +208,6 @@ export const ContextProvider = (props) => {
         }
     };
 
-    const makePayment = async () => {
-        const stripe = await loadStripe("pk_test_51Qb00V4f1GcD06tgCq3EGLQoD2DTEOmaIrpUr4CjiMyCOFWqaj1DVJrErHbtJ2VkBkW5FIJwgEUiPHWOv5URksfU00bvadjQKz");
-    
-        const body = {
-            products: cartItems, 
-        };
-    
-        const headers = {
-            "Content-Type": "application/json",
-        };
-    
-        try {
-            // Make the POST request using Axios
-            const response = await axios.post(`${BASE_URL}/create-checkout-session`, body, { headers });
-            
-            const session = response.data; // Assuming the response contains the session object
-    
-            // Redirect to Stripe Checkout
-            const result = await stripe.redirectToCheckout({
-                sessionId: session.id,
-            });
-    
-            if (result.error) {
-                console.error(result.error.message);
-            }
-        } catch (error) {
-            console.error("Error creating checkout session:", error.response?.data || error.message);
-        }
-    };
     
     useEffect(() => {
         getAllData()
@@ -252,13 +222,14 @@ export const ContextProvider = (props) => {
                 }
             )
                 .then((response) => {
+                    console.log(response.data)
                     setCartItems(response.data);
                 })
                 .catch((error) => {
                     console.error('Error fetching cart data:', error);
                 });
         }
-    }, [])
+    }, [token])
 
     useEffect(() => {
         getMensProducts()
@@ -299,7 +270,6 @@ export const ContextProvider = (props) => {
             isLoading,
             setIsLoading,
             LogoutUser,
-            makePayment
         }}>
             {props.children}
         </shopContext.Provider>

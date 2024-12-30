@@ -22,6 +22,7 @@ import ForgetPassword from './Component/ForgetPassword/ForgetPassword.jsx'
 import MyAccount from './Component/MyAccount/MyAccount.jsx';
 import ResetPassw from './Component/ResetPassw/Resetpassw.jsx'
 import Form from './Pages/form.jsx'
+import Checkout from './Pages/Checkout.jsx'
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
                 <Route path="/form" element={<Form />} />
                 <Route path="/forgetpass" element={<ForgetPassword/>} />
                 <Route path="/resetpass" element={<ResetPassw/>} />
+                <Route path="/checkout" element={<Checkout/>} />
               </Routes>
             </div>
             <Footer />

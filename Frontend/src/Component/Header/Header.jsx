@@ -24,11 +24,11 @@ const Header = () => {
                 {
                     isLoggedin ?
                         <div className="login-form bg-white">
-                            <NavLink className='text-blue-950 font-bold p-2 border-1' to='/logout'>Logout</NavLink>
+                            <NavLink className='text-blue-950 font-bold p-2' to='/logout'>Logout</NavLink>
                         </div>
                         :
                         <div className="login-form bg-white">
-                            <NavLink className='text-blue-950 font-bold p-2 border-1' to='/myAcc'>Login</NavLink>
+                            <NavLink className='text-blue-950 font-bold p-2' to='/myAcc'>Login</NavLink>
                         </div>
                 }
             </div>
