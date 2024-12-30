@@ -150,6 +150,8 @@ const Checkout = () => {
                         <button type='submit'>Submit</button>
                     </form>
                 </div>
+            </section>
+            <div className="summary-contain">
                 {showContainer2 && (<>
                     <div className="container2-checkout">
                         <div className="card deliveryto">
@@ -186,7 +188,7 @@ const Checkout = () => {
                     </div>
                 </>
                 )}
-            </section>
+            </div>
         </>
     )
 }

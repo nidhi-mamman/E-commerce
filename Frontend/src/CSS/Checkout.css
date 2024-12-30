@@ -5,6 +5,12 @@
   justify-content: center;
 }
 
+.summary-contain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .container-checkout {
   padding: 10px;
   width: 100%;
@@ -88,14 +94,17 @@
 
 @media screen and (max-width: 740px) {
   .section {
-    padding: 10px;
-    flex-direction: column;
     margin-top: 14.5rem !important;
   }
   .order-summary-card .card-body {
     width: 20rem;
   }
 
+  .summary-contain {
+    display: flex;
+    flex-direction: column;
+  }
+  
   .deliveryto .card-body {
     width: 20rem;
   }
