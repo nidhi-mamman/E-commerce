@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  padding-inline: 3rem;
+  padding-block: 0.5rem;
+  justify-content: space-between;
+  background-color: #001f54;
+}
+
+.header .social-links {
+  display: flex;
+  gap: 1rem;
+}
+@media screen and (max-width:740px){
+  .header{
+    display: none;
+  }
+}
